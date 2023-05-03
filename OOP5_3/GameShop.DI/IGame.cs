@@ -1,4 +1,4 @@
-﻿namespace GameShop.Bll
+﻿namespace GameShop.DI
 {
     public interface IGame
     {

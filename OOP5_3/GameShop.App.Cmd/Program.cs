@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using GameShop.Bll;
+using GameShop.Data.Memory;
 
 namespace GameShop.App.Cmd
 {
@@ -20,7 +21,9 @@ namespace GameShop.App.Cmd
 
         private static IShop CreateShop(string name, string address)
         {
-            var shop = new Shop(name, address);
+            var data = new InMemoryData();
+
+            var shop = new Shop(name, address, data, data);
             return shop;
         }
         #endregion
@@ -47,7 +50,7 @@ namespace GameShop.App.Cmd
                             WriteHelpMessage();
                             break;
                         case Command.AddGame:
-                            AddGame();
+                            AddGame(shop);
                             break;
                         case Command.GetAllGames:
                             GetAllGames(shop);
@@ -68,7 +71,7 @@ namespace GameShop.App.Cmd
             }
         }
 
-        private static IGame AddGame()
+        private static void AddGame(IShop shop)
         {
             Console.WriteLine("Добавление новой игры");
 
@@ -78,16 +81,11 @@ namespace GameShop.App.Cmd
             var developer = ReadNotEmptyLine("Разработчик игры");
             var price = ReadIntLine("Стоимость игры");
 
-            var game = CreateGame(name, platform, publisher,developer, price);
+            var book = CreateGame(name, platform, publisher, developer, price) ?? throw new Exception("Ошибка при добавлении игры");
 
-            if (game != null)
-            {
-                Console.WriteLine("Игра успешно добавлена");
-                Console.WriteLine();
-                return game;
-            }
-
-            throw new Exception("Ошибка при добавлении книги");
+            shop.Add(book);
+            Console.WriteLine("Игра успешно добавлена");
+            Console.WriteLine();
         }
 
         private static void GetAllGames(IShop shop)

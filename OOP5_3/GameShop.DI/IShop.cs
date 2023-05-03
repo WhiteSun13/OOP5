@@ -1,9 +1,9 @@
-﻿namespace GameShop.Bll
+﻿namespace GameShop.DI
 {
     public interface IShop
     {
-        string Name { get; }
-        string Address { get; }
+        string Name { get; set; }
+        string Address { get; set; }
 
         void Add(IGame game);
         IEnumerable<IGame> GetAllGames();

@@ -1,4 +1,5 @@
-﻿namespace GameShop.Bll
+﻿using GameShop.DI
+namespace GameShop.Bll
 {
     public class Game : IGame
     {
