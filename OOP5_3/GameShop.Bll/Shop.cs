@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using GameShop.DI;
 namespace GameShop.Bll
 {
     public class Shop : IShop
