@@ -1,0 +1,26 @@
+﻿<Window x:Class="OOP5_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OOP5_2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <RadioButton x:Name="imperialRadio" Content="Imperial" HorizontalAlignment="Left" Margin="55,60,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="metricRadio" Content="Metric" HorizontalAlignment="Left" Margin="55,80,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="imperialValueLabel" Content="imperialValueLabel" HorizontalAlignment="Left" Margin="167,54,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="metricValueLabel" Content="metricValueLabel" HorizontalAlignment="Left" Margin="167,74,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="rawDataList" Height="203" VerticalAlignment="Top" Margin="360,19,10,0"/>
+        <Button x:Name="createInstance" Content="Сreate Instance" HorizontalAlignment="Left" Margin="54,111,0,0" VerticalAlignment="Top" Click="createInstance_Click"/>
+        <Button x:Name="startCollecting" Content="Start Collecting" HorizontalAlignment="Left" Margin="54,149,0,0" VerticalAlignment="Top" Click="startCollecting_Click"/>
+        <Button x:Name="stopCollecting" Content="Stop Collecting" HorizontalAlignment="Left" Margin="54,197,0,0" VerticalAlignment="Top" Click="stopCollecting_Click"/>
+        <Button x:Name="getRawData" Content="Get Raw Data" HorizontalAlignment="Left" Margin="167,111,0,0" VerticalAlignment="Top" Click="getRawData_Click"/>
+        <Button x:Name="getMetricValue" Content="Get metric value" HorizontalAlignment="Left" Margin="167,197,0,0" VerticalAlignment="Top" Click="getMetricValue_Click"/>
+        <Button x:Name="getImperialValue" Content="Get imperial value" HorizontalAlignment="Left" Margin="165,149,0,0" VerticalAlignment="Top" Click="getImperialValue_Click"/>
+        <Grid>
+            <RadioButton x:Name="lengthRadio" Content="Length Device" HorizontalAlignment="Left" Margin="55,36,0,0" VerticalAlignment="Top"/>
+            <RadioButton x:Name="massRadio" Content="Mass Device" HorizontalAlignment="Left" Margin="167,36,0,0" VerticalAlignment="Top"/>
+        </Grid>
+    </Grid>
+</Window>
