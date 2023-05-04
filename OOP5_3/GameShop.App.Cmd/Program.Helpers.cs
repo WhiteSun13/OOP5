@@ -23,12 +23,12 @@
             while (true)
             {
                 var input = ReadNotEmptyLine(title);
-                if (int.TryParse(input, out int result))
+                if (int.TryParse(input, out int result) && result > 0)
                 {
                     return result;
                 }
 
-                WriteErrorMessage($"Введите целое число");
+                WriteErrorMessage($"Введите целое положительное число");
             }
         }
 
@@ -57,6 +57,7 @@
         private static void WriteHelpMessage()
         {
             Console.WriteLine($"{Command.AddGame} - Добавить новую игру;");
+            Console.WriteLine($"{Command.AddGameCopies} - Увеличить количество товара;");
             Console.WriteLine($"{Command.GetAllGames} - Вывести полный список доступных игр;");
             Console.WriteLine($"{Command.SellGame} - Продать игру;");
             Console.WriteLine($"{Command.Exit} - Выход из приложения;");

@@ -1,30 +1,58 @@
-﻿using System.Text;
+﻿using GameShop.DI;
+using GameShop.Settings;
+using GameShop.App.Cmd;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using GameShop.Bll;
-using GameShop.Data.Memory;
 
 namespace GameShop.App.Cmd
 {
     partial class Program
     {
         #region DI - Внедрение зависимости
-        private static IGame CreateGame(string name, string platform, string publisher, string developer, int price)
+        private static Configuration _configuration;
+
+        private static IGame CreateGame(string name, string platform, string publisher, string genre, int price, int copies)
         {
-            var game = new Game(name, platform, publisher, developer, price);
+            var game = _configuration.Container.GetInstance<IGame>();
+            game.Name = name;
+            game.Platform = platform;
+            game.Publisher = publisher;
+            game.Genre = genre;
+            game.Price = price;
+            game.Copies = copies;
+
+            var shop = _configuration.Container.GetInstance<IShop>();
+            shop.Add(game);
+
             return game;
         }
 
-        private static ICheck CreateCheck(IShop shop, IGame game)
+        private static ICheck CreateCheck(IGame game, int copies)
         {
-            var check = new Check(shop, game);
+            var shop = _configuration.Container.GetInstance<IShop>();
+            var check = shop.Sell(game,copies);
+
             return check;
         }
 
         private static IShop CreateShop(string name, string address)
         {
-            var data = new InMemoryData();
+            var shop = _configuration.Container.GetInstance<IShop>();
+            shop.Name = name;
+            shop.Address = address;
 
-            var shop = new Shop(name, address, data, data);
             return shop;
+        }
+
+        private static IEnumerable<IGame> GetAllGames()
+        {
+            var shop = _configuration.Container.GetInstance<IShop>();
+            var games = shop.GetAllGames();
+
+            return games;
         }
         #endregion
 
@@ -32,7 +60,9 @@ namespace GameShop.App.Cmd
         {
             try
             {
-                var shop = CreateShop("GameStop", "13 Little Bevan Street, Bloomsbury, London");
+                _configuration = new Configuration();
+
+                var shop = CreateShop("Black Games", "13 Little Bevan Street, Bloomsbury, London");
 
                 Console.OutputEncoding = Encoding.UTF8;
                 Console.WriteLine("Добрый день. Добро пожаловать в панель управления магазином");
@@ -50,13 +80,16 @@ namespace GameShop.App.Cmd
                             WriteHelpMessage();
                             break;
                         case Command.AddGame:
-                            AddGame(shop);
+                            AddGame();
+                            break;
+                        case Command.AddGameCopies:
+                            AddGameCopies();
                             break;
                         case Command.GetAllGames:
-                            GetAllGames(shop);
+                            ShowAllGames();
                             break;
                         case Command.SellGame:
-                            SellGame(shop);
+                            SellGame();
                             break;
                         default:
                             WriteErrorMessage("Не обрабатываемая команда. Свяжитесь с разработчиком");
@@ -71,45 +104,33 @@ namespace GameShop.App.Cmd
             }
         }
 
-        private static void AddGame(IShop shop)
+        private static void AddGame()
         {
             Console.WriteLine("Добавление новой игры");
 
             var name = ReadNotEmptyLine("Название игры");
             var platform = ReadNotEmptyLine("Платформа");
-            var publisher = ReadNotEmptyLine("Издатель игры");
-            var developer = ReadNotEmptyLine("Разработчик игры");
+            var publisher = ReadNotEmptyLine("Издатель");
+            var genre = ReadNotEmptyLine("Жанр");
             var price = ReadIntLine("Стоимость игры");
+            var copies = ReadIntLine("Количество товара");
 
-            var book = CreateGame(name, platform, publisher, developer, price) ?? throw new Exception("Ошибка при добавлении игры");
+            var game = CreateGame(name, platform, publisher, genre, price, copies) ?? throw new Exception("Ошибка при добавлении игры");
 
-            shop.Add(book);
-            Console.WriteLine("Игра успешно добавлена");
+            Console.WriteLine($"Игра [{game}] успешно добавлена");
             Console.WriteLine();
         }
 
-        private static void GetAllGames(IShop shop)
+        private static void AddGameCopies()
         {
-            Console.WriteLine("Список всех доступных в магазине игр:");
-
-            var games = shop.GetAllGames();
-            foreach (var game in games)
-            {
-                Console.WriteLine(game);
-            }
-            Console.WriteLine();
-        }
-
-        private static void SellGame(IShop shop)
-        {
-            Console.WriteLine("Новая продажа игры");
-
             IGame game;
+            int copies;
             while (true)
             {
                 var name = ReadNotEmptyLine("Название игры");
-                var books = shop.GetAllGames();
-                var result = books.FirstOrDefault(b => b.Name.Equals(name));
+                var platform = ReadNotEmptyLine("Платформу");
+                var games = GetAllGames();
+                var result = games.FirstOrDefault(b => b.Name.Equals(name) && b.Platform.Equals(platform));
 
                 if (result != null)
                 {
@@ -119,9 +140,57 @@ namespace GameShop.App.Cmd
 
                 WriteErrorMessage("Данная игра не найдена");
             }
+            copies = ReadIntLine("Количество товара");
+            var shop = _configuration.Container.GetInstance<IShop>();
+            shop.AddCopies(game, copies);
+            Console.WriteLine($"Количество товара {game.Name} ({game.Platform}) увеличилось!");
+        }
 
-            var check = CreateCheck(shop, game);
-            check.Print();
+        private static void ShowAllGames()
+        {
+            Console.WriteLine("Список всех доступных в магазине игр:");
+
+            var games = GetAllGames();
+            foreach (var game in games)
+            {
+                Console.WriteLine($"{game}" + $" | В наличии: {game.Copies}");
+            }
+            Console.WriteLine();
+        }
+
+        private static void SellGame()
+        {
+            Console.WriteLine("Новая продажа игры");
+
+            IGame game;
+            int copies;
+            while (true)
+            {
+                var name = ReadNotEmptyLine("Название игры");
+                var platform = ReadNotEmptyLine("Платформу");
+                var games = GetAllGames();
+                var result = games.FirstOrDefault(b => b.Name.Equals(name) && b.Platform.Equals(platform));
+
+                if (result != null)
+                {
+                    game = result;
+                    break;
+                }
+
+                WriteErrorMessage("Данная игра не найдена");
+            }
+            while (true)
+            {
+                copies = ReadIntLine("Колчество");
+                if ((copies <= game.Copies) && (copies > 0)) break;
+                WriteErrorMessage($"Введено не правильное количество. В наличии: {game.Copies}");
+            }
+            var check = CreateCheck(game, copies);
+            Console.WriteLine($"Новая продажа в магазине {check.Shop.Name}");
+            Console.WriteLine($"по адресу {check.Shop.Address}");
+            Console.WriteLine($"{check.DateTime}");
+            Console.WriteLine($"Наименование товара: {check.Game}");
+            Console.WriteLine($"Стоимость: {check.Game.Price}₽");
             Console.WriteLine();
         }
     }

@@ -3,6 +3,7 @@
     public enum Command
     {
         AddGame,
+        AddGameCopies,
         GetAllGames,
         SellGame,
         Exit,

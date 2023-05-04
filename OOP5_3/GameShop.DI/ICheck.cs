@@ -7,7 +7,5 @@ namespace GameShop.DI
         IShop Shop { get; set; }
         IGame Game { get; set; }
         DateTime DateTime { get; set; }
-
-        string Print();
     }
 }

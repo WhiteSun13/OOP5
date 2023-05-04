@@ -1,25 +1,23 @@
-﻿using System;
+﻿using GameShop.DI;
+using GameShop.Bll;
+using System;
 using System.Collections.Generic;
-using GameShop.DI;
+using System.Linq;
+
 namespace GameShop.Bll
 {
     public class Shop : IShop
     {
         private readonly IData<IGame> _gameData;
         private readonly IData<ICheck> _checkData;
-        public string Name { get; }
-        public string Address { get; }
 
-        public Shop(string name, string address, IData<IGame> gameData, IData<ICheck> checkData)
+        public string Name { get; set; }
+        public string Address { get; set; }
+
+        public Shop(IData<IGame> gameData, IData<ICheck> checkData)
         {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if (string.IsNullOrWhiteSpace(address)) throw new ArgumentNullException(nameof(address));
-
             _gameData = gameData ?? throw new ArgumentNullException(nameof(gameData));
             _checkData = checkData ?? throw new ArgumentNullException(nameof(checkData));
-
-            Name = name;
-            Address = address;
         }
 
         public void Add(IGame game)
@@ -32,9 +30,18 @@ namespace GameShop.Bll
             return _gameData.ReadAll();
         }
 
-        public ICheck Sell(IGame game)
+        public ICheck Sell(IGame game, int copies)
         {
-            var check = new Check(this, game);
+            game.Copies -= copies;
+            //_gameData.Remove(game);
+
+            var check = new Check()
+            {
+                Game = game,
+                Shop = this,
+                DateTime = DateTime.Now
+            };
+
             _checkData.Add(check);
             return check;
         }
@@ -42,6 +49,11 @@ namespace GameShop.Bll
         public override string ToString()
         {
             return Name;
+        }
+
+        public void AddCopies(IGame game, int copies)
+        {
+            game.Copies += copies;
         }
     }
 }
