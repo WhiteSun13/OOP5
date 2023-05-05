@@ -18,13 +18,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameShop.Bll", "OOP5_3\Game
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameShop.Data.Memory", "OOP5_3\GameShop.Data.Memory\GameShop.Data.Memory.csproj", "{DD111C4D-063C-459B-AA73-DD5053D96762}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameShop.DI", "OOP5_3\GameShop.DI\GameShop.DI.csproj", "{3CAAF003-F286-466F-88E7-15432F9D36BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameShop.DI", "OOP5_3\GameShop.DI\GameShop.DI.csproj", "{3CAAF003-F286-466F-88E7-15432F9D36BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameShop.Settings", "OOP5_3\GameShop.Settings\GameShop.Settings.csproj", "{497BEE04-F70D-4A9E-89D1-4BCCA443AC83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameShop.Settings", "OOP5_3\GameShop.Settings\GameShop.Settings.csproj", "{497BEE04-F70D-4A9E-89D1-4BCCA443AC83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameShop.Data.Sql", "OOP5_3\GameShop.Data.Sql\GameShop.Data.Sql.csproj", "{4423A67D-DFAC-456E-B71B-F666137390D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameShop.Data.Sql", "OOP5_3\GameShop.Data.Sql\GameShop.Data.Sql.csproj", "{4423A67D-DFAC-456E-B71B-F666137390D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameShop.Tests", "OOP5_3\GameShop.Tests\GameShop.Tests.csproj", "{A51D74BD-19A3-41C5-A89F-0E4E5B1E7574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameShop.Tests", "OOP5_3\GameShop.Tests\GameShop.Tests.csproj", "{A51D74BD-19A3-41C5-A89F-0E4E5B1E7574}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
