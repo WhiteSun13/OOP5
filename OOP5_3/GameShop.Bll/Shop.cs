@@ -1,5 +1,4 @@
 ﻿using GameShop.DI;
-using GameShop.Bll;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +32,7 @@ namespace GameShop.Bll
         public ICheck Sell(IGame game, int copies)
         {
             game.Copies -= copies;
-            //_gameData.Remove(game);
+            if (game.Copies <= 0) { _gameData.Remove(game); }
 
             var check = new Check()
             {
